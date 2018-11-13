@@ -1,23 +1,24 @@
 {
-  "name": "krei",
+  "name": "aeboilerplate",
   "version": "3.0.1",
-  "description": "Global scripts to create new full-stack projects using krei",
+  "description": "Global scripts to create new full-stack projects using aeboilerplate",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/agencyenterprise/krei.git"
+    "url": "git+https://github.com/agencyenterprise/aeboilerplate.git"
   },
   "author": {
     "name": "AE Studio",
     "url": "https://ae.studio/"
   },
   "license": "MIT",
-  "homepage": "https://github.com/agencyenterprise/krei",
+  "homepage": "https://github.com/agencyenterprise/aeboilerplate",
   "bin": {
-    "krei": "./cli.js"
+    "aeboilerplate": "./cli.js"
   },
   "dependencies": {
-    "commander": "^2.19.0"
+    "commander": "^2.19.0",
+    "shelljs": "^0.8.3"
   },
   "devDependencies": {
     "prettier": "^1.14.3"

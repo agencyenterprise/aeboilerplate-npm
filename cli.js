@@ -1,61 +1,41 @@
 #!/usr/bin/env node
 
-var program = require('commander')
-var spawn = require('child_process').spawn
+const program = require('commander')
+const shell = require('shelljs')
 
 program
-  .arguments('<ProjectName>')
-  .option('-s, --ssh', 'Use ssh instead of https')
-  .action(function(ProjectName) {
-    console.log('Creating project: ', ProjectName)
+  .arguments('<projectName>')
+  .option('--https', 'Use https instead of ssh')
+  .action(function(projectName) {
+    console.log('Creating project: ', projectName)
 
-    var command = 'git'
-    var args, args2
+    let gitUrl
 
-    if (program.ssh) args = ['clone', 'https://github.com/agencyenterprise/krei.git', ProjectName]
-    else args = ['clone', 'git@github.com:agencyenterprise/krei.git', ProjectName]
-    name = ProjectName
+    if (program.https) {
+      gitUrl = 'https://github.com/agencyenterprise/aeboilerplate.git'
+    } else {
+      gitUrl = 'git@github.com:agencyenterprise/aeboilerplate.git'
+    }
 
-    var p = spawn('git', args)
-    p.stdout.on('data', (data) => {
-      console.log(data.toString())
-    })
+    // Needed by commander to set a global variable to check for an empty argument
+    argumentProjectName = projectName
 
-    p.stderr.on('data', (data) => {
-      console.log(data.toString())
-    })
+    if (shell.exec(`git clone ${gitUrl} ${projectName}`).code !== 0) {
+      console.log(`Error! Git clone failed for URL: ${gitUrl}`)
+      process.exit(1)
+    }
 
-    p.on('close', (code) => {
-      if (code == 0) {
-        console.log('')
-        console.log('krei successfuly cloned in to: ', ProjectName)
-        console.log('')
-        console.log('')
-        console.log(
-          'The next step is to install the npm dependencies of your project.  You can do this by executing the following two commands:',
-        )
-        console.log('')
-        console.log('  cd', ProjectName)
-        console.log('  npm install')
-        console.log('')
-        console.log('See https://github.com/agencyenterprise/krei for additional information to get started.')
-        console.log('')
-      } else {
-        console.log('git clone existed with error code: ', code.toString())
-      }
-    })
+    shell.cd(projectName)
+    shell.exec(`npm run aeboilerplate`)
   })
+
   .version('0.0.1', '-v, --version')
   .parse(process.argv)
 
-if (typeof name === 'undefined') {
-  console.log('')
-  console.error('Error: Project name was not specified.')
-  console.log('')
-  console.log('Try: krei <ProjectName> [-ssh]')
-  console.log('Where <ProjectName> is the name of the project that you would like to initiate using Krei.')
-  console.log('')
-  console.log('  -s, --ssh    Use ssh instead of https to clone from github.')
-  console.log('')
+if (typeof argumentProjectName === 'undefined') {
+  console.error('\nError: Project name was not specified.')
+  console.log('Try: aeboilerplate <projectName> [-ssh]')
+  console.log('Where <projectName> is the name of the project that you would like to initiate using AEboilerplate.')
+  console.log('  --https    Use https instead of ssh to clone from github.')
   process.exit(1)
 }
