@@ -16,10 +16,12 @@ program
   .parse(process.argv)
 
 if (typeof argumentProjectName === 'undefined') {
-  console.error('\nError: Project name was not specified.')
-  console.log('Try: aeboilerplate <projectName> [-ssh]')
-  console.log('Where <projectName> is the name of the project that you would like to initiate using AEboilerplate.')
-  console.log('  --https    Use https instead of ssh to clone from github.')
+  console.error('Please specify the project name:\n')
+  console.error('aeboilerplate'.cyan, '<project-name> [--https]'.yellow)
+  console.error('\nFor example:\n')
+  console.error('aeboilerplate'.cyan, 'my-full-stack-app'.yellow)
+  console.error('\n<project-name> is the name of the project that you would like to create using AEboilerplate.')
+  console.error('[--https] to use https instead of ssh to clone from github.')
   process.exit(1)
 }
 
